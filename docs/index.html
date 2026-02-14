@@ -2981,11 +2981,13 @@
             background: #111;
             color: #fff;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 24px;
             font-size: 14px;
             font-weight: 500;
             letter-spacing: 1px;
             transition: all 0.3s;
+            cursor: pointer;
+            border: none;
         }
 
         .browse-btn:hover {
@@ -3066,7 +3068,7 @@
             <div class="saved-empty-state" id="saved-empty">
                 <h3>No saved items yet</h3>
                 <p>Click the "Save" button on any work to add it to your collection</p>
-                <a href="#" class="browse-btn" onclick="showPage('home')">Browse Work</a>
+                <button class="browse-btn" onclick="document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('home-page').classList.add('active'); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); document.querySelector('.nav-tab[data-page=\"home\"]').classList.add('active'); window.scrollTo(0,0);">Browse Work</button>
             </div>
         </div>
         
