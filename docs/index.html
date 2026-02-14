@@ -333,24 +333,28 @@
             .specimen-id, .specimen-price {
                 display: none;
             }
-            /* Disable hover animations on mobile */
-            .pin:hover {
-                transform: none !important;
-            }
-            .vault-specimen:hover {
+            /* Disable ALL hover animations on mobile */
+            .pin:hover, .pin:active {
                 transform: none !important;
                 box-shadow: none !important;
+                animation: none !important;
             }
-            .specimen-row:hover {
+            .vault-specimen:hover, .vault-specimen:active {
                 transform: none !important;
+                box-shadow: none !important;
+                animation: none !important;
             }
-            /* Glitch effect for mobile taps */
-            .pin:active {
-                animation: glitch-mobile 0.3s ease;
+            .specimen-row:hover, .specimen-row:active {
+                transform: none !important;
+                box-shadow: none !important;
+                animation: none !important;
             }
-            .vault-specimen:active {
-                animation: glitch-mobile 0.3s ease;
+            /* Disable 3D magnetic tilt on mobile */
+            .pin {
+                transform: none !important;
+                transition: opacity 0.3s ease !important;
             }
+            /* Glitch effect ONLY for intentional taps on buttons */
             .mobile-item:active {
                 animation: glitch-mobile 0.2s ease;
             }
@@ -3268,15 +3272,14 @@
             pin.className = 'pin';
 
             const isSaved = savedImages.includes(filename);
-            const encodedFilename = encodeImageUrl(filename);
 
             pin.innerHTML = `
-                <img src="${encodedFilename}"
+                <img src="${filename}"
                      alt=""
                      loading="lazy"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div style="display:none; background:#fff; align-items:center; justify-content:center; color:#ccc; border-radius:16px; padding: 80px 20px; border: 1px solid #eee;">
-                    📷
+                     onerror="this.style.opacity='0.3'; this.style.background='#f0f0f0';">
+                <div style="display:none; background: linear-gradient(135deg, #f5f5f5, #e8e8e8); align-items:center; justify-content:center; color:#999; border-radius:16px; padding: 80px 20px; border: 1px solid #ddd; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">
+                    Loading...
                 </div>
                 <div class="pin-overlay">
                     ${showSaveButton ? `
@@ -3289,7 +3292,7 @@
 
             pin.onclick = (e) => {
                 if (e.target.tagName !== 'BUTTON') {
-                    openModal(encodedFilename);
+                    openModal(filename);
                 }
             };
 
@@ -3598,11 +3601,6 @@
             }
         ];
 
-        // Helper to encode image URLs
-        function encodeImageUrl(url) {
-            return url.replace(/ /g, '%20').replace(/,/g, '%2C');
-        }
-
         // Render clean catalog list
         const shopGrid = document.getElementById('shop-grid');
 
@@ -3623,9 +3621,8 @@
                 const row = document.createElement('div');
                 row.className = 'specimen-row';
                 row.style.animation = `fadeIn 0.3s ease ${index * 0.05}s both`;
-                const encodedImage = encodeImageUrl(product.images[0]);
                 row.innerHTML = `
-                    <img src="${encodedImage}" alt="${product.name}" class="specimen-thumb" onerror="this.style.background='#eee'">
+                    <img src="${product.images[0]}" alt="${product.name}" class="specimen-thumb" onerror="this.style.background='linear-gradient(135deg, #f5f5f5, #e8e8e8)'">
                     <div class="specimen-info">
                         <h3>${product.name}</h3>
                         <p>${product.specs.material} // ${product.specs.dimensions}</p>
