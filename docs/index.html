@@ -244,11 +244,36 @@
             cursor: pointer;
             transition: all 0.3s;
             text-align: left;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .mobile-item:hover, .mobile-item.active {
             background: #1a1a1a;
             border-color: #2DD512;
+        }
+
+        /* Mobile glitch effect on tap */
+        @media (pointer: coarse) {
+            .mobile-item:active {
+                animation: mobile-glitch 0.2s ease;
+                background: #2DD512;
+            }
+            .mobile-item:active .item-label {
+                color: #000;
+            }
+            .mobile-item:active .item-num {
+                color: #000;
+                opacity: 1;
+            }
+        }
+
+        @keyframes mobile-glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 1px); }
+            40% { transform: translate(2px, -1px); }
+            60% { transform: translate(-1px, -1px); }
+            80% { transform: translate(1px, 1px); }
+            100% { transform: translate(0); }
         }
 
         .item-num {
@@ -308,6 +333,37 @@
             .specimen-id, .specimen-price {
                 display: none;
             }
+            /* Disable hover animations on mobile */
+            .pin:hover {
+                transform: none !important;
+            }
+            .vault-specimen:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            .specimen-row:hover {
+                transform: none !important;
+            }
+            /* Glitch effect for mobile taps */
+            .pin:active {
+                animation: glitch-mobile 0.3s ease;
+            }
+            .vault-specimen:active {
+                animation: glitch-mobile 0.3s ease;
+            }
+            .mobile-item:active {
+                animation: glitch-mobile 0.2s ease;
+            }
+        }
+        
+        /* Mobile glitch animation */
+        @keyframes glitch-mobile {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+            40% { transform: translate(2px, -2px); filter: hue-rotate(180deg); }
+            60% { transform: translate(-2px, -2px); filter: hue-rotate(270deg); }
+            80% { transform: translate(2px, 2px); filter: hue-rotate(180deg); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); }
         }
         
         /* MAIN CONTENT */
@@ -3168,12 +3224,12 @@
         const images = [
             '1.png',
             '2.png',
-            'Generated Image December 07, 2025 - 4_33PM.jpeg',
-            'Generated Image February 04, 2026 - 6_46PM (1).jpeg',
-            'Generated Image February 04, 2026 - 6_50PM.jpeg',
-            'Generated Image January 06, 2026 - 12_58AM.jpeg',
-            'Generated Image January 11, 2026 - 9_25PM.jpeg',
-            'Generated Image January 29, 2026 - 8_36PM.jpeg',
+            'Generated%20Image%20December%2007%2C%202025%20-%204_33PM.jpeg',
+            'Generated%20Image%20February%2004%2C%202026%20-%206_46PM%20(1).jpeg',
+            'Generated%20Image%20February%2004%2C%202026%20-%206_50PM.jpeg',
+            'Generated%20Image%20January%2006%2C%202026%20-%2012_58AM.jpeg',
+            'Generated%20Image%20January%2011%2C%202026%20-%209_25PM.jpeg',
+            'Generated%20Image%20January%2029%2C%202026%20-%208_36PM.jpeg',
             'front.jpeg',
             'open.jpeg',
             'otherside.jpeg'
@@ -3213,10 +3269,12 @@
             pin.className = 'pin';
             
             const isSaved = savedImages.includes(filename);
+            const encodedFilename = encodeImageUrl(filename);
             
             pin.innerHTML = `
-                <img src="${filename}" 
+                <img src="${encodedFilename}" 
                      alt=""
+                     loading="lazy"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div style="display:none; background:#fff; align-items:center; justify-content:center; color:#ccc; border-radius:16px; padding: 80px 20px; border: 1px solid #eee;">
                     📷
@@ -3232,7 +3290,7 @@
             
             pin.onclick = (e) => {
                 if (e.target.tagName !== 'BUTTON') {
-                    openModal(filename);
+                    openModal(encodedFilename);
                 }
             };
             
@@ -3295,16 +3353,23 @@
             const menu = document.getElementById('mobile-menu');
             const backdrop = document.getElementById('mobile-backdrop');
             
+            // Add glitch effect to clicked item
+            const clickedItem = document.querySelector(`.mobile-item[data-page="${page}"]`);
+            if (clickedItem) {
+                clickedItem.style.animation = 'mobile-glitch 0.3s ease';
+            }
+            
             // Close menu immediately
             menu.classList.remove('active');
             backdrop.classList.remove('active');
             document.body.style.overflow = '';
             
-            // Navigate after transition
+            // Navigate after glitch animation
             setTimeout(() => {
                 showPage(page);
                 window.scrollTo(0, 0);
-            }, 300);
+                if (clickedItem) clickedItem.style.animation = '';
+            }, 250);
         }
 
         function showPage(page) {
@@ -3534,6 +3599,11 @@
             }
         ];
         
+        // Helper to encode image URLs
+        function encodeImageUrl(url) {
+            return url.replace(/ /g, '%20').replace(/,/g, '%2C');
+        }
+
         // Render clean catalog list
         const shopGrid = document.getElementById('shop-grid');
 
@@ -3554,8 +3624,9 @@
                 const row = document.createElement('div');
                 row.className = 'specimen-row';
                 row.style.animation = `fadeIn 0.3s ease ${index * 0.05}s both`;
+                const encodedImage = encodeImageUrl(product.images[0]);
                 row.innerHTML = `
-                    <img src="${product.images[0]}" alt="${product.name}" class="specimen-thumb" onerror="this.style.background='#eee'">
+                    <img src="${encodedImage}" alt="${product.name}" class="specimen-thumb" onerror="this.style.background='#eee'">
                     <div class="specimen-info">
                         <h3>${product.name}</h3>
                         <p>${product.specs.material} // ${product.specs.dimensions}</p>
