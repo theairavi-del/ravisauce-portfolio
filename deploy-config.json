@@ -1,0 +1,50 @@
+{
+  "project": {
+    "name": "ravisauce-website",
+    "description": "Ravi Sauce Portfolio & Shop",
+    "version": "1.0.0"
+  },
+  "deployment": {
+    "primary": "github-pages",
+    "fallback": "cloudflare-pages",
+    "autoDeploy": true,
+    "branch": "main"
+  },
+  "github": {
+    "repo": "ravisauce/ravisauce",
+    "pagesBranch": "gh-pages",
+    "customDomain": null,
+    "enforceHttps": true
+  },
+  "cloudflare": {
+    "projectName": "ravisauce-website",
+    "customDomain": null,
+    "buildCommand": null,
+    "buildOutput": "."
+  },
+  "netlify": {
+    "siteName": "ravisauce",
+    "customDomain": null,
+    "buildCommand": null,
+    "publishDirectory": "."
+  },
+  "files": {
+    "main": "pinterest-clone.html",
+    "index": "index.html",
+    "assets": [
+      "*.png",
+      "*.jpg",
+      "*.jpeg",
+      "*.gif",
+      "*.svg",
+      "*.css",
+      "*.js"
+    ]
+  },
+  "lastDeploy": {
+    "platform": null,
+    "timestamp": null,
+    "commit": null,
+    "url": null
+  }
+}
