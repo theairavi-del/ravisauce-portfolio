@@ -2829,20 +2829,31 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: #2DD512;
             color: #fff;
             border: none;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            line-height: 40px;
             padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .modal-close span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            margin-top: -2px;
+            margin-left: 1px;
         }
 
         .modal-close:hover {
@@ -3053,7 +3064,6 @@
         <div id="saved-page" class="page">
             <div class="masonry-grid" id="saved-grid"></div>
             <div class="saved-empty-state" id="saved-empty">
-                <div class="saved-empty-icon">📌</div>
                 <h3>No saved items yet</h3>
                 <p>Click the "Save" button on any work to add it to your collection</p>
                 <a href="#" class="browse-btn" onclick="showPage('home')">Browse Work</a>
@@ -3145,7 +3155,7 @@
     <div class="modal-overlay" id="modal" onclick="closeModal(event)">
         <button class="nav-arrow prev" onclick="event.stopPropagation(); navigateImage(-1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal()"><span>×</span></button>
             <img id="modal-img" src="" alt="">
         </div>
         <button class="nav-arrow next" onclick="event.stopPropagation(); navigateImage(1)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
