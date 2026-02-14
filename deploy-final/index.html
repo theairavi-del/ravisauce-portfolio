@@ -3,19 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ravisauce Portfolio - A Pinterest-style design portfolio showcasing creative work, moodboards, and inspiration. Built with modern web technologies.">
-    <meta name="keywords" content="portfolio, design, pinterest, moodboard, creative, ravisauce, web design">
-    <meta name="author" content="Ravisauce">
-    <meta property="og:title" content="Ravisauce | Pinterest-Style Portfolio">
-    <meta property="og:description" content="A curated collection of design inspiration, moodboards, and creative work. Explore the portfolio.">
+    
+    <!-- Primary Meta Tags -->
+    <title>Ravi's Visual Portfolio | Pinterest Clone Project</title>
+    <meta name="title" content="Ravi's Visual Portfolio | Pinterest Clone Project">
+    <meta name="description" content="A Pinterest-inspired visual portfolio showcasing creative projects, design work, and curated inspiration. Built with vanilla HTML/CSS/JS.">
+    <meta name="keywords" content="portfolio, web design, pinterest clone, frontend developer, UI design, visual gallery, ravisauce, creative portfolio">
+    <meta name="author" content="Ravi">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#2DD512">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ravisauce-portfolio.pages.dev">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ravisauce-portfolio.surge.sh">
-    <meta property="og:image" content="https://ravisauce-portfolio.surge.sh/1.png">
+    <meta property="og:url" content="https://ravisauce-portfolio.pages.dev">
+    <meta property="og:title" content="Ravi's Visual Portfolio | Pinterest Clone Project">
+    <meta property="og:description" content="A Pinterest-inspired visual portfolio showcasing creative projects and design work.">
+    <meta property="og:image" content="https://ravisauce-portfolio.pages.dev/1.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Ravi's Portfolio">
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ravisauce | Pinterest-Style Portfolio">
-    <meta name="twitter:description" content="A curated collection of design inspiration and creative work.">
-    <meta name="twitter:image" content="https://ravisauce-portfolio.surge.sh/1.png">
-    <title>Ravisauce | Pinterest-Style Portfolio</title>
+    <meta name="twitter:url" content="https://ravisauce-portfolio.pages.dev">
+    <meta name="twitter:title" content="Ravi's Visual Portfolio | Pinterest Clone Project">
+    <meta name="twitter:description" content="A Pinterest-inspired visual portfolio showcasing creative projects and design work.">
+    <meta name="twitter:image" content="https://ravisauce-portfolio.pages.dev/1.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/ravisauce-logo-final.png">
+    <link rel="apple-touch-icon" href="/ravisauce-logo-final.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
         * {
             margin: 0;
@@ -3000,7 +3024,7 @@
     <!-- HEADER -->
     <header class="header">
         <div class="logo" onclick="showPage('home')">
-            <img src="ravisauce-logo-transparent.png" alt="Ravi Sauce" style="width: 45px; height: 45px; object-fit: contain;">
+            <img src="ravisauce-logo-transparent.png" alt="Ravi Sauce" style="width: 45px; height: 45px; object-fit: contain;" loading="eager" decoding="async">
         </div>
         
         <nav class="nav-tabs" id="nav-tabs">
@@ -3217,6 +3241,8 @@
             pin.innerHTML = `
                 <img src="${filename}" 
                      alt=""
+                     loading="lazy"
+                     decoding="async"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div style="display:none; background:#fff; align-items:center; justify-content:center; color:#ccc; border-radius:16px; padding: 80px 20px; border: 1px solid #eee;">
                     📷
