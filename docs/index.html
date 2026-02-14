@@ -2995,6 +2995,7 @@
             color: #000;
             transform: translateY(-2px);
         }
+        }
     </style>
 </head>
 <body>
@@ -3068,7 +3069,7 @@
             <div class="saved-empty-state" id="saved-empty">
                 <h3>No saved items yet</h3>
                 <p>Click the "Save" button on any work to add it to your collection</p>
-                <button class="browse-btn" onclick="document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('home-page').classList.add('active'); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); document.querySelector('.nav-tab[data-page=\"home\"]').classList.add('active'); window.scrollTo(0,0);">Browse Work</button>
+                <button class="browse-btn" onclick="goHome()">Browse Work</button>
             </div>
         </div>
         
@@ -3334,6 +3335,37 @@
 
             // Update URL hash for direct linking
             window.location.hash = page;
+        }
+
+        // Go to home page (for browse button)
+        function goHome() {
+            // Update tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.page === 'home') {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Update pages
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById('home-page').classList.add('active');
+
+            // Update mobile items
+            document.querySelectorAll('.mobile-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === 'home') {
+                    item.classList.add('active');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update URL
+            window.location.hash = 'home';
         }
 
         // Handle direct links on page load
