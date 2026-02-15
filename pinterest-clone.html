@@ -3397,6 +3397,8 @@
         }
 
         function showPage(page) {
+            console.log('Showing page:', page);
+            
             // Update tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.page === page);
@@ -3406,7 +3408,14 @@
             document.querySelectorAll('.page').forEach(p => {
                 p.classList.remove('active');
             });
-            document.getElementById(page + '-page').classList.add('active');
+            
+            const pageElement = document.getElementById(page + '-page');
+            console.log('Page element found:', pageElement);
+            if (pageElement) {
+                pageElement.classList.add('active');
+            } else {
+                console.error('Page not found:', page + '-page');
+            }
 
             // Update mobile items
             document.querySelectorAll('.mobile-item').forEach(item => {
