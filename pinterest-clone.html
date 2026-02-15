@@ -3359,15 +3359,25 @@
         }
 
         function goToPage(page) {
+            console.log('goToPage called with:', page);
+            
             // Close menu first
             const menu = document.getElementById('mobile-menu');
             const backdrop = document.getElementById('mobile-backdrop');
-            menu.classList.remove('active');
-            backdrop.classList.remove('active');
+            if (menu) menu.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('active');
             document.body.style.overflow = '';
             
+            // Check if page element exists
+            const pageEl = document.getElementById(page + '-page');
+            console.log('Page element for', page, ':', pageEl);
+            
             // Then navigate
-            showPage(page);
+            if (typeof showPage === 'function') {
+                showPage(page);
+            } else {
+                console.error('showPage function not found');
+            }
             window.scrollTo(0, 0);
         }
 
@@ -3662,6 +3672,10 @@
         const shopGrid = document.getElementById('shop-grid');
 
         function renderProducts(productsToRender) {
+            if (!shopGrid) {
+                console.error('Shop grid not found');
+                return;
+            }
             shopGrid.innerHTML = '';
 
             if (productsToRender.length === 0) {
