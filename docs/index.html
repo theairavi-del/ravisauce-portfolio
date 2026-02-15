@@ -308,6 +308,22 @@
             .specimen-id, .specimen-price {
                 display: none;
             }
+            /* Remove pin animations on mobile */
+            .pin {
+                transform: none !important;
+                transition: none !important;
+            }
+            .pin:active {
+                transform: none !important;
+            }
+            /* Instant modal on mobile */
+            .modal-overlay {
+                transition: none !important;
+            }
+            .modal-content {
+                transition: none !important;
+                animation: none !important;
+            }
         }
         
         /* MAIN CONTENT */
