@@ -15,7 +15,6 @@
     <meta name="twitter:title" content="RAVISAUCE">
     <meta name="twitter:description" content="A curated collection of design inspiration and creative work.">
     <meta name="twitter:image" content="https://ravisauce-portfolio.surge.sh/1.png">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self';">
     <title>RAVISAUCE</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -3094,22 +3093,22 @@
                 <button class="mobile-close" id="mobile-close">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <div class="mobile-item" onclick="mobileNav('home')" data-page="home">
+                <button class="mobile-item" data-page="home" type="button">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </div>
-                <div class="mobile-item" onclick="mobileNav('saved')" data-page="saved">
+                </button>
+                <button class="mobile-item" data-page="saved" type="button">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </div>
-                <div class="mobile-item" onclick="mobileNav('shop')" data-page="shop">
+                </button>
+                <button class="mobile-item" data-page="shop" type="button">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </div>
-                <div class="mobile-item" onclick="mobileNav('contact')" data-page="contact">
+                </button>
+                <button class="mobile-item" data-page="contact" type="button">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </div>
+                </button>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3350,64 +3349,13 @@
             event.stopPropagation();
         }
 
-        // Simple mobile navigation function
-        function mobileNav(page) {
-            console.log('mobileNav called:', page);
-            
-            // Close menu
-            var menu = document.getElementById('mobile-menu');
-            var backdrop = document.getElementById('mobile-backdrop');
-            if (menu) menu.classList.remove('active');
-            if (backdrop) backdrop.classList.remove('active');
-            document.body.style.overflow = '';
-            
-            // Show page
-            console.log('Switching to page:', page);
-            
-            // Update tabs
-            var tabs = document.querySelectorAll('.nav-tab');
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.toggle('active', tabs[i].dataset.page === page);
-            }
-            
-            // Update pages
-            var pages = document.querySelectorAll('.page');
-            for (var i = 0; i < pages.length; i++) {
-                pages[i].classList.remove('active');
-            }
-            
-            var targetPage = document.getElementById(page + '-page');
-            console.log('Target page:', targetPage);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            
-            // Update mobile items
-            var items = document.querySelectorAll('.mobile-item');
-            for (var i = 0; i < items.length; i++) {
-                items[i].classList.toggle('active', items[i].dataset.page === page);
-            }
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-            
-            // Update hash
-            window.location.hash = page;
-            
-            // Render saved if needed
-            if (page === 'saved' && typeof renderSaved === 'function') {
-                renderSaved();
-            }
-            
-            return false;
-        }
-        
-        // MOBILE MENU - REBUILT
-        (function() {
+        // MOBILE NAVIGATION - Clean implementation
+        document.addEventListener('DOMContentLoaded', function() {
             var menu = document.getElementById('mobile-menu');
             var backdrop = document.getElementById('mobile-backdrop');
             var toggle = document.getElementById('mobile-toggle');
-            var close = document.getElementById('mobile-close');
+            var closeBtn = document.getElementById('mobile-close');
+            var menuItems = document.querySelectorAll('.mobile-item');
             
             function openMenu() {
                 if (menu) menu.classList.add('active');
@@ -3421,10 +3369,54 @@
                 document.body.style.overflow = '';
             }
             
+            function navigateToPage(page) {
+                // Close menu
+                closeMenu();
+                
+                // Update tabs
+                var tabs = document.querySelectorAll('.nav-tab');
+                for (var i = 0; i < tabs.length; i++) {
+                    if (tabs[i].dataset.page === page) {
+                        tabs[i].classList.add('active');
+                    } else {
+                        tabs[i].classList.remove('active');
+                    }
+                }
+                
+                // Hide all pages
+                var pages = document.querySelectorAll('.page');
+                for (var i = 0; i < pages.length; i++) {
+                    pages[i].classList.remove('active');
+                }
+                
+                // Show target page
+                var target = document.getElementById(page + '-page');
+                if (target) {
+                    target.classList.add('active');
+                }
+                
+                // Update mobile items
+                for (var i = 0; i < menuItems.length; i++) {
+                    if (menuItems[i].dataset.page === page) {
+                        menuItems[i].classList.add('active');
+                    } else {
+                        menuItems[i].classList.remove('active');
+                    }
+                }
+                
+                // Scroll and hash
+                window.scrollTo(0, 0);
+                window.location.hash = page;
+                
+                // Render saved if needed
+                if (page === 'saved' && typeof renderSaved === 'function') {
+                    renderSaved();
+                }
+            }
+            
             // Toggle button
             if (toggle) {
                 toggle.addEventListener('click', function(e) {
-                    e.preventDefault();
                     e.stopPropagation();
                     if (menu && menu.classList.contains('active')) {
                         closeMenu();
@@ -3435,9 +3427,8 @@
             }
             
             // Close button
-            if (close) {
-                close.addEventListener('click', function(e) {
-                    e.preventDefault();
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     closeMenu();
                 });
@@ -3445,11 +3436,29 @@
             
             // Backdrop click
             if (backdrop) {
-                backdrop.addEventListener('click', function(e) {
-                    closeMenu();
-                });
+                backdrop.addEventListener('click', closeMenu);
             }
-        })();
+            
+            // Menu items - use touchstart for faster mobile response
+            for (var i = 0; i < menuItems.length; i++) {
+                (function(item) {
+                    var page = item.dataset.page;
+                    
+                    // Click handler
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigateToPage(page);
+                    });
+                    
+                    // Touch handler for mobile
+                    item.addEventListener('touchstart', function(e) {
+                        e.preventDefault();
+                        navigateToPage(page);
+                    }, {passive: false});
+                })(menuItems[i]);
+            }
+        });
 
         function showPage(page) {
             console.log('showPage called:', page);
