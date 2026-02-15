@@ -285,31 +285,10 @@
 
         @media (max-width: 768px) {
             .nav-tabs {
-                display: flex;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: #fff;
-                border-top: 1px solid #efefef;
-                padding: 12px 20px;
-                justify-content: space-around;
-                z-index: 1000;
-                gap: 0;
-            }
-            .nav-tab {
-                font-size: 12px;
-                padding: 8px 12px;
-                border-radius: 20px;
-            }
-            .mobile-toggle {
                 display: none;
             }
-            .mobile-menu, .mobile-backdrop {
-                display: none !important;
-            }
-            body {
-                padding-bottom: 60px;
+            .mobile-toggle {
+                display: flex;
             }
             .specimen-row {
                 grid-template-columns: 60px 1fr auto;
@@ -3034,6 +3013,30 @@
             <button class="nav-tab" onclick="showPage('shop')" data-page="shop">Shop</button>
             <button class="nav-tab" onclick="showPage('contact')" data-page="contact">Contact</button>
         </nav>
+
+        <!-- MOBILE MENU TOGGLE -->
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Menu">
+            <div class="hamburger-sci">
+                <span class="h-line"></span>
+                <span class="h-line"></span>
+                <span class="h-line"></span>
+            </div>
+        </button>
+
+        <!-- MOBILE MENU -->
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-header">
+                <span class="mobile-id">RAV—ACCESS</span>
+                <button class="mobile-close" id="mobile-close">×</button>
+            </div>
+            <div class="mobile-menu-items" id="mobile-menu-items">
+                <button class="mobile-item" data-page="home">HOME</button>
+                <button class="mobile-item" data-page="saved">SAVED</button>
+                <button class="mobile-item" data-page="shop">SHOP</button>
+                <button class="mobile-item" data-page="contact">CONTACT</button>
+            </div>
+        </div>
+        <div class="mobile-backdrop" id="mobile-backdrop"></div>
     </header>
     
     <!-- MAIN CONTENT -->
@@ -3262,6 +3265,39 @@
             // Prevent click from opening modal
             event.stopPropagation();
         }
+
+        // MOBILE MENU
+        document.addEventListener('DOMContentLoaded', function() {
+            const menu = document.getElementById('mobile-menu');
+            const backdrop = document.getElementById('mobile-backdrop');
+            const toggle = document.getElementById('mobile-toggle');
+            const close = document.getElementById('mobile-close');
+            const items = document.querySelectorAll('.mobile-item');
+            
+            function openMenu() {
+                menu.classList.add('active');
+                backdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeMenu() {
+                menu.classList.remove('active');
+                backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            if (toggle) toggle.addEventListener('click', openMenu);
+            if (close) close.addEventListener('click', closeMenu);
+            if (backdrop) backdrop.addEventListener('click', closeMenu);
+            
+            items.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    closeMenu();
+                    showPage(page);
+                });
+            });
+        });
 
         function showPage(page) {
             // Update tabs
