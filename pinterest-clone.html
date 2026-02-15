@@ -3093,22 +3093,22 @@
                 <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <a href="#home" class="mobile-item" onclick="showPage('home'); toggleMobileMenu(); return false;" data-page="home">
+                <div class="mobile-item" onclick="goToPage('home')" data-page="home">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </a>
-                <a href="#saved" class="mobile-item" onclick="showPage('saved'); toggleMobileMenu(); return false;" data-page="saved">
+                </div>
+                <div class="mobile-item" onclick="goToPage('saved')" data-page="saved">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </a>
-                <a href="#shop" class="mobile-item" onclick="showPage('shop'); toggleMobileMenu(); return false;" data-page="shop">
+                </div>
+                <div class="mobile-item" onclick="goToPage('shop')" data-page="shop">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </a>
-                <a href="#contact" class="mobile-item" onclick="showPage('contact'); toggleMobileMenu(); return false;" data-page="contact">
+                </div>
+                <div class="mobile-item" onclick="goToPage('contact')" data-page="contact">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </a>
+                </div>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3356,6 +3356,19 @@
             menu.classList.toggle('active');
             backdrop.classList.toggle('active');
             document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function goToPage(page) {
+            // Close menu first
+            const menu = document.getElementById('mobile-menu');
+            const backdrop = document.getElementById('mobile-backdrop');
+            menu.classList.remove('active');
+            backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Then navigate
+            showPage(page);
+            window.scrollTo(0, 0);
         }
 
         function navigateFromMobile(page) {
