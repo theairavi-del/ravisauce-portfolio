@@ -3093,22 +3093,22 @@
                 <button class="mobile-close" id="mobile-close">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <button class="mobile-item" data-page="home" type="button">
+                <div class="mobile-item" id="mobile-home">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </button>
-                <button class="mobile-item" data-page="saved" type="button">
+                </div>
+                <div class="mobile-item" id="mobile-saved">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </button>
-                <button class="mobile-item" data-page="shop" type="button">
+                </div>
+                <div class="mobile-item" id="mobile-shop">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </button>
-                <button class="mobile-item" data-page="contact" type="button">
+                </div>
+                <div class="mobile-item" id="mobile-contact">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </button>
+                </div>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3349,114 +3349,54 @@
             event.stopPropagation();
         }
 
-        // MOBILE NAVIGATION - Clean implementation
+        // MOBILE MENU - Simple
         document.addEventListener('DOMContentLoaded', function() {
-            var menu = document.getElementById('mobile-menu');
-            var backdrop = document.getElementById('mobile-backdrop');
-            var toggle = document.getElementById('mobile-toggle');
+            // Menu toggle
+            var menuBtn = document.getElementById('mobile-toggle');
             var closeBtn = document.getElementById('mobile-close');
-            var menuItems = document.querySelectorAll('.mobile-item');
+            var backdrop = document.getElementById('mobile-backdrop');
+            var menu = document.getElementById('mobile-menu');
             
-            function openMenu() {
-                if (menu) menu.classList.add('active');
-                if (backdrop) backdrop.classList.add('active');
+            menuBtn.addEventListener('click', function() {
+                menu.classList.add('active');
+                backdrop.classList.add('active');
                 document.body.style.overflow = 'hidden';
-            }
+            });
             
-            function closeMenu() {
-                if (menu) menu.classList.remove('active');
-                if (backdrop) backdrop.classList.remove('active');
+            closeBtn.addEventListener('click', function() {
+                menu.classList.remove('active');
+                backdrop.classList.remove('active');
                 document.body.style.overflow = '';
-            }
+            });
             
-            function navigateToPage(page) {
+            backdrop.addEventListener('click', function() {
+                menu.classList.remove('active');
+                backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // Menu links
+            document.getElementById('mobile-home').addEventListener('click', function() {
+                switchPage('home');
+            });
+            document.getElementById('mobile-saved').addEventListener('click', function() {
+                switchPage('saved');
+            });
+            document.getElementById('mobile-shop').addEventListener('click', function() {
+                switchPage('shop');
+            });
+            document.getElementById('mobile-contact').addEventListener('click', function() {
+                switchPage('contact');
+            });
+            
+            function switchPage(page) {
                 // Close menu
-                closeMenu();
+                menu.classList.remove('active');
+                backdrop.classList.remove('active');
+                document.body.style.overflow = '';
                 
-                // Update tabs
-                var tabs = document.querySelectorAll('.nav-tab');
-                for (var i = 0; i < tabs.length; i++) {
-                    if (tabs[i].dataset.page === page) {
-                        tabs[i].classList.add('active');
-                    } else {
-                        tabs[i].classList.remove('active');
-                    }
-                }
-                
-                // Hide all pages
-                var pages = document.querySelectorAll('.page');
-                for (var i = 0; i < pages.length; i++) {
-                    pages[i].classList.remove('active');
-                }
-                
-                // Show target page
-                var target = document.getElementById(page + '-page');
-                if (target) {
-                    target.classList.add('active');
-                }
-                
-                // Update mobile items
-                for (var i = 0; i < menuItems.length; i++) {
-                    if (menuItems[i].dataset.page === page) {
-                        menuItems[i].classList.add('active');
-                    } else {
-                        menuItems[i].classList.remove('active');
-                    }
-                }
-                
-                // Scroll and hash
-                window.scrollTo(0, 0);
-                window.location.hash = page;
-                
-                // Render saved if needed
-                if (page === 'saved' && typeof renderSaved === 'function') {
-                    renderSaved();
-                }
-            }
-            
-            // Toggle button
-            if (toggle) {
-                toggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (menu && menu.classList.contains('active')) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                });
-            }
-            
-            // Close button
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    closeMenu();
-                });
-            }
-            
-            // Backdrop click
-            if (backdrop) {
-                backdrop.addEventListener('click', closeMenu);
-            }
-            
-            // Menu items - use touchstart for faster mobile response
-            for (var i = 0; i < menuItems.length; i++) {
-                (function(item) {
-                    var page = item.dataset.page;
-                    
-                    // Click handler
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        navigateToPage(page);
-                    });
-                    
-                    // Touch handler for mobile
-                    item.addEventListener('touchstart', function(e) {
-                        e.preventDefault();
-                        navigateToPage(page);
-                    }, {passive: false});
-                })(menuItems[i]);
+                // Show page
+                showPage(page);
             }
         });
 
