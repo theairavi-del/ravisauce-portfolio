@@ -3452,33 +3452,6 @@
         });
 
         // FOOTER LIVE DATA
-
-            // Update mobile items
-            document.querySelectorAll('.mobile-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.page === page);
-            });
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Update modal navigation source
-            if (page === 'saved') {
-                renderSaved();
-            }
-
-            // Update URL hash for direct linking
-            window.location.hash = page;
-        }
-
-        // Handle direct links on page load
-        window.addEventListener('load', () => {
-            const hash = window.location.hash.replace('#', '');
-            if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
-                showPage(hash);
-            }
-        });
-
-        // FOOTER LIVE DATA
         function updateFooterData() {
             // Temperature (random fluctuation around 21°C)
             const temp = (20.8 + Math.random() * 0.8).toFixed(1);
