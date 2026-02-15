@@ -250,6 +250,8 @@
             pointer-events: auto;
             position: relative;
             z-index: 5001;
+            text-decoration: none;
+            color: inherit;
         }
 
         .mobile-item:hover, .mobile-item.active {
@@ -3091,22 +3093,22 @@
                 <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <div class="mobile-item" data-page="home" role="button" tabindex="0">
+                <a href="#home" class="mobile-item" onclick="showPage('home'); toggleMobileMenu(); return false;" data-page="home">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </div>
-                <div class="mobile-item" data-page="saved" role="button" tabindex="0">
+                </a>
+                <a href="#saved" class="mobile-item" onclick="showPage('saved'); toggleMobileMenu(); return false;" data-page="saved">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </div>
-                <div class="mobile-item" data-page="shop" role="button" tabindex="0">
+                </a>
+                <a href="#shop" class="mobile-item" onclick="showPage('shop'); toggleMobileMenu(); return false;" data-page="shop">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </div>
-                <div class="mobile-item" data-page="contact" role="button" tabindex="0">
+                </a>
+                <a href="#contact" class="mobile-item" onclick="showPage('contact'); toggleMobileMenu(); return false;" data-page="contact">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </div>
+                </a>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3416,26 +3418,6 @@
             if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
                 showPage(hash);
             }
-            
-            // Bind mobile menu item clicks
-            document.querySelectorAll('.mobile-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const page = this.dataset.page;
-                    if (page) {
-                        navigateFromMobile(page);
-                    }
-                });
-                
-                // Also bind touchstart for faster response on mobile
-                item.addEventListener('touchstart', function(e) {
-                    this.style.background = '#2DD512';
-                });
-                item.addEventListener('touchend', function(e) {
-                    this.style.background = '';
-                });
-            });
         });
 
         // FOOTER LIVE DATA
