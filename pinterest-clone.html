@@ -3078,7 +3078,7 @@
         </nav>
 
         <!-- MOBILE MENU TOGGLE -->
-        <button class="mobile-toggle" id="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Menu">
             <div class="hamburger-sci">
                 <span class="h-line"></span>
                 <span class="h-line"></span>
@@ -3090,25 +3090,25 @@
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-header">
                 <span class="mobile-id">RAV-ACCESS</span>
-                <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
+                <button class="mobile-close" id="mobile-close">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <div class="mobile-item" onclick="goToPage('home')" data-page="home">
+                <a href="#" class="mobile-item" data-page="home">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </div>
-                <div class="mobile-item" onclick="goToPage('saved')" data-page="saved">
+                </a>
+                <a href="#" class="mobile-item" data-page="saved">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </div>
-                <div class="mobile-item" onclick="goToPage('shop')" data-page="shop">
+                </a>
+                <a href="#" class="mobile-item" data-page="shop">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </div>
-                <div class="mobile-item" onclick="goToPage('contact')" data-page="contact">
+                </a>
+                <a href="#" class="mobile-item" data-page="contact">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </div>
+                </a>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3118,7 +3118,7 @@
                 <div class="mobile-coords">THE MOON</div>
             </div>
         </div>
-        <div class="mobile-backdrop" id="mobile-backdrop" onclick="toggleMobileMenu()"></div>
+        <div class="mobile-backdrop" id="mobile-backdrop"></div>
     </header>
 
     <!-- MAIN CONTENT -->
@@ -3349,49 +3349,70 @@
             event.stopPropagation();
         }
 
-        // MOBILE MENU TOGGLE
-        function toggleMobileMenu() {
+        // MOBILE MENU - REBUILT
+        (function() {
             const menu = document.getElementById('mobile-menu');
             const backdrop = document.getElementById('mobile-backdrop');
-            menu.classList.toggle('active');
-            backdrop.classList.toggle('active');
-            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-        }
-
-        function goToPage(page) {
-            // Close menu
-            document.getElementById('mobile-menu').classList.remove('active');
-            document.getElementById('mobile-backdrop').classList.remove('active');
-            document.body.style.overflow = '';
+            const toggle = document.getElementById('mobile-toggle');
+            const close = document.getElementById('mobile-close');
+            const menuItems = document.querySelectorAll('.mobile-item');
             
-            // Show page
-            showPage(page);
-        }
-
-        function navigateFromMobile(page) {
-            const menu = document.getElementById('mobile-menu');
-            const backdrop = document.getElementById('mobile-backdrop');
-
-            // Add glitch effect to clicked item
-            const clickedItem = document.querySelector(`.mobile-item[data-page="${page}"]`);
-            if (clickedItem) {
-                clickedItem.style.animation = 'mobile-glitch 0.3s ease';
+            function openMenu() {
+                menu.classList.add('active');
+                backdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-
-            // Close menu immediately
-            menu.classList.remove('active');
-            backdrop.classList.remove('active');
-            document.body.style.overflow = '';
-
-            // Navigate after glitch animation
-            setTimeout(() => {
-                showPage(page);
-                window.scrollTo(0, 0);
-                if (clickedItem) clickedItem.style.animation = '';
-            }, 250);
             
-            return false;
-        }
+            function closeMenu() {
+                menu.classList.remove('active');
+                backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Toggle button
+            if (toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (menu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+            
+            // Close button
+            if (close) {
+                close.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
+            
+            // Backdrop click
+            if (backdrop) {
+                backdrop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeMenu();
+                });
+            }
+            
+            // Menu items
+            menuItems.forEach(function(item) {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const page = this.getAttribute('data-page');
+                    if (page) {
+                        closeMenu();
+                        showPage(page);
+                    }
+                });
+            });
+        })();
 
         function showPage(page) {
             // Update tabs
@@ -3428,16 +3449,6 @@
             if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
                 showPage(hash);
             }
-            
-            // Bind mobile menu items
-            document.querySelectorAll('.mobile-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const page = this.getAttribute('data-page');
-                    goToPage(page);
-                });
-            });
         });
 
         // FOOTER LIVE DATA
