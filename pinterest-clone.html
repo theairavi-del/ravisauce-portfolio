@@ -3359,26 +3359,13 @@
         }
 
         function goToPage(page) {
-            console.log('goToPage called with:', page);
-            
-            // Close menu first
-            const menu = document.getElementById('mobile-menu');
-            const backdrop = document.getElementById('mobile-backdrop');
-            if (menu) menu.classList.remove('active');
-            if (backdrop) backdrop.classList.remove('active');
+            // Close menu
+            document.getElementById('mobile-menu').classList.remove('active');
+            document.getElementById('mobile-backdrop').classList.remove('active');
             document.body.style.overflow = '';
             
-            // Check if page element exists
-            const pageEl = document.getElementById(page + '-page');
-            console.log('Page element for', page, ':', pageEl);
-            
-            // Then navigate
-            if (typeof showPage === 'function') {
-                showPage(page);
-            } else {
-                console.error('showPage function not found');
-            }
-            window.scrollTo(0, 0);
+            // Show page
+            showPage(page);
         }
 
         function navigateFromMobile(page) {
@@ -3441,14 +3428,6 @@
             if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
                 showPage(hash);
             }
-        });
-
-        // MOBILE DEBUG - Test if shop and contact elements exist
-        window.addEventListener('load', () => {
-            console.log('Shop page exists:', !!document.getElementById('shop-page'));
-            console.log('Contact page exists:', !!document.getElementById('contact-page'));
-            console.log('Home page exists:', !!document.getElementById('home-page'));
-            console.log('Saved page exists:', !!document.getElementById('saved-page'));
         });
 
         // FOOTER LIVE DATA
