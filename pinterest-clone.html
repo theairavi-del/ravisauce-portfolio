@@ -3093,22 +3093,22 @@
                 <button class="mobile-close" id="mobile-close">×</button>
             </div>
             <div class="mobile-menu-items" id="mobile-menu-items">
-                <a href="#" class="mobile-item" data-page="home">
+                <div class="mobile-item" onclick="mobileNav('home')" data-page="home">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </a>
-                <a href="#" class="mobile-item" data-page="saved">
+                </div>
+                <div class="mobile-item" onclick="mobileNav('saved')" data-page="saved">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </a>
-                <a href="#" class="mobile-item" data-page="shop">
+                </div>
+                <div class="mobile-item" onclick="mobileNav('shop')" data-page="shop">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </a>
-                <a href="#" class="mobile-item" data-page="contact">
+                </div>
+                <div class="mobile-item" onclick="mobileNav('contact')" data-page="contact">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </a>
+                </div>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3349,23 +3349,74 @@
             event.stopPropagation();
         }
 
+        // Simple mobile navigation function
+        function mobileNav(page) {
+            console.log('mobileNav called:', page);
+            
+            // Close menu
+            var menu = document.getElementById('mobile-menu');
+            var backdrop = document.getElementById('mobile-backdrop');
+            if (menu) menu.classList.remove('active');
+            if (backdrop) backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Show page
+            console.log('Switching to page:', page);
+            
+            // Update tabs
+            var tabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.toggle('active', tabs[i].dataset.page === page);
+            }
+            
+            // Update pages
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            
+            var targetPage = document.getElementById(page + '-page');
+            console.log('Target page:', targetPage);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Update mobile items
+            var items = document.querySelectorAll('.mobile-item');
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.toggle('active', items[i].dataset.page === page);
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Update hash
+            window.location.hash = page;
+            
+            // Render saved if needed
+            if (page === 'saved' && typeof renderSaved === 'function') {
+                renderSaved();
+            }
+            
+            return false;
+        }
+        
         // MOBILE MENU - REBUILT
         (function() {
-            const menu = document.getElementById('mobile-menu');
-            const backdrop = document.getElementById('mobile-backdrop');
-            const toggle = document.getElementById('mobile-toggle');
-            const close = document.getElementById('mobile-close');
-            const menuItems = document.querySelectorAll('.mobile-item');
+            var menu = document.getElementById('mobile-menu');
+            var backdrop = document.getElementById('mobile-backdrop');
+            var toggle = document.getElementById('mobile-toggle');
+            var close = document.getElementById('mobile-close');
             
             function openMenu() {
-                menu.classList.add('active');
-                backdrop.classList.add('active');
+                if (menu) menu.classList.add('active');
+                if (backdrop) backdrop.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
             
             function closeMenu() {
-                menu.classList.remove('active');
-                backdrop.classList.remove('active');
+                if (menu) menu.classList.remove('active');
+                if (backdrop) backdrop.classList.remove('active');
                 document.body.style.overflow = '';
             }
             
@@ -3374,7 +3425,7 @@
                 toggle.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (menu.classList.contains('active')) {
+                    if (menu && menu.classList.contains('active')) {
                         closeMenu();
                     } else {
                         openMenu();
@@ -3394,27 +3445,9 @@
             // Backdrop click
             if (backdrop) {
                 backdrop.addEventListener('click', function(e) {
-                    e.preventDefault();
                     closeMenu();
                 });
             }
-            
-            // Menu items
-            menuItems.forEach(function(item) {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const page = this.getAttribute('data-page');
-                    console.log('Mobile menu clicked:', page);
-                    
-                    if (page) {
-                        console.log('Closing menu and showing page:', page);
-                        closeMenu();
-                        showPage(page);
-                    }
-                });
-            });
         })();
 
         function showPage(page) {
