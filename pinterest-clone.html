@@ -246,6 +246,10 @@
             transition: all 0.3s;
             text-align: left;
             -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            pointer-events: auto;
+            position: relative;
+            z-index: 5001;
         }
 
         .mobile-item:hover, .mobile-item.active {
@@ -3087,22 +3091,22 @@
                 <button class="mobile-close" onclick="toggleMobileMenu()">×</button>
             </div>
             <div class="mobile-menu-items">
-                <button class="mobile-item" onclick="navigateFromMobile('home')" data-page="home">
+                <div class="mobile-item" onclick="navigateFromMobile('home')" data-page="home" role="button" tabindex="0">
                     <span class="item-num">01</span>
                     <span class="item-label">HOME</span>
-                </button>
-                <button class="mobile-item" onclick="navigateFromMobile('saved')" data-page="saved">
+                </div>
+                <div class="mobile-item" onclick="navigateFromMobile('saved')" data-page="saved" role="button" tabindex="0">
                     <span class="item-num">02</span>
                     <span class="item-label">SAVED</span>
-                </button>
-                <button class="mobile-item" onclick="navigateFromMobile('shop')" data-page="shop">
+                </div>
+                <div class="mobile-item" onclick="navigateFromMobile('shop')" data-page="shop" role="button" tabindex="0">
                     <span class="item-num">03</span>
                     <span class="item-label">SHOP</span>
-                </button>
-                <button class="mobile-item" onclick="navigateFromMobile('contact')" data-page="contact">
+                </div>
+                <div class="mobile-item" onclick="navigateFromMobile('contact')" data-page="contact" role="button" tabindex="0">
                     <span class="item-num">04</span>
                     <span class="item-label">CONTACT</span>
-                </button>
+                </div>
             </div>
             <div class="mobile-menu-footer">
                 <div class="mobile-status">
@@ -3373,6 +3377,8 @@
                 window.scrollTo(0, 0);
                 if (clickedItem) clickedItem.style.animation = '';
             }, 250);
+            
+            return false;
         }
 
         function showPage(page) {
