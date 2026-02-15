@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN // AGORA ALPHA</title>
+    <style>
+        :root { --bg: #050505; --accent: #CCFF00; --text: #FFFFFF; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-box {
+            background: #111;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        .logo { font-size: 32px; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: 5px; }
+        input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo">AGORA</div>
+        <form method="POST">
+            <input type="text" name="username" placeholder="USERNAME" required>
+            <input type="password" name="password" placeholder="PASSWORD" required>
+            <button type="submit">INITIALIZE PROTOCOL</button>
+        </form>
+        <div style="font-size: 10px; color: #444; margin-top: 20px;">RAVISAUCE 2028 SECURE ACCESS</div>
+    </div>
+</body>
+</html>

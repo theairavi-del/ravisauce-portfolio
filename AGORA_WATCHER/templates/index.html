@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGORA // ALPHA PROTOCOL</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #CCFF00;
+            --text: #FFFFFF;
+            --rarity-mythic: linear-gradient(135deg, #ff00ff, #00ffff);
+            --rarity-epic: linear-gradient(135deg, #dbadff, #00A3FF);
+            --rarity-rare: #00A3FF;
+            --rarity-common: #444;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+        }
+        .xp-bar-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: #111;
+            z-index: 1000;
+        }
+        .xp-bar-fill {
+            height: 100%;
+            width: 85%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+        .top-nav {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 6px; z-index: 900;
+        }
+        .player-stats { display: flex; gap: 30px; font-size: 11px; font-weight: 900; letter-spacing: 2px; }
+        .stat-item span { color: var(--accent); }
+
+        .agora-header {
+            text-align: center;
+            margin: 60px 0;
+        }
+        
+        /* LOGO DESIGN - ARCHITECTURAL PRECISION */
+        .logo-wrap {
+            display: inline-block;
+            position: relative;
+        }
+        .logo-icon {
+            width: 50px; height: 50px;
+            border: 4px solid var(--accent);
+            display: block; margin: 0 auto 25px;
+            background: repeating-concentric-gradient(circle, var(--accent), var(--accent) 1px, transparent 2px, transparent 8px);
+        }
+        .agora-logo {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 16px; /* Matches width of PREDICTION TERMINAL exactly */
+            color: var(--accent);
+            line-height: 1;
+            display: block;
+            margin-right: -16px; /* Offset the last letter's spacing */
+        }
+        .tagline {
+            font-size: 14.5px;
+            letter-spacing: 5.6px;
+            color: #666;
+            text-transform: uppercase;
+            border-top: 1px solid #222;
+            padding-top: 10px;
+            margin-top: 10px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .cat-btn {
+            background: #111;
+            border: 1px solid #222;
+            color: #666;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cat-btn.active, .cat-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: #000;
+        }
+
+        .deck-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 50px;
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card-wrapper {
+            perspective: 2000px;
+            height: 520px;
+        }
+
+        .card {
+            background: #000;
+            border-radius: 24px;
+            padding: 12px;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 2px solid #222;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, border-color 0.4s, box-shadow 0.4s;
+            will-change: transform;
+        }
+
+        .card-inner {
+            flex: 1;
+            background: #080808;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border: 1px solid #111;
+            pointer-events: none;
+            transform: translateZ(20px); /* Push content forward */
+        }
+
+        .portrait {
+            flex: 1;
+            background: #000;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .portrait-img {
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+            filter: grayscale(1) brightness(0.8) contrast(1.2);
+            transition: 0.5s;
+        }
+        .card:hover .portrait-img { filter: grayscale(0) brightness(1); }
+
+        .char-name { font-size: 26px; font-weight: 900; letter-spacing: -1px; margin-bottom: 2px; color: #fff;}
+        .char-class { font-size: 10px; color: var(--accent); letter-spacing: 4px; margin-bottom: 15px; }
+
+        .game-stats {
+            background: #111;
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .stat-box { border-left: 2px solid #222; padding-left: 10px; }
+        .label { font-size: 8px; color: #555; text-transform: uppercase; margin-bottom: 2px;}
+        .val { font-size: 18px; font-weight: 900; color: var(--accent); }
+
+        .unlock-btn {
+            background: var(--accent);
+            color: #000;
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 900;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+        
+        /* RARITY STYLES */
+        .MYTHIC { border-color: #ff00ff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.2); }
+        .MYTHIC .char-name { background: var(--rarity-mythic); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .EPIC { border-color: #dbadff; }
+        .EPIC .char-name { background: var(--rarity-epic); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body>
+    <div class="xp-bar-container"><div class="xp-bar-fill"></div></div>
+    
+    <div class="top-nav">
+        <div style="font-weight: 900; color: var(--accent); letter-spacing: 1px;">SYSTEM_USER: NICO_2028</div>
+        <div class="player-stats">
+            <div class="stat-item">LEVEL: <span>99</span></div>
+            <div class="stat-item">RANK: <span>ARCHITECT</span></div>
+            <div class="stat-item">WALLET: <span>UNLOCKED</span></div>
+        </div>
+    </div>
+
+    <div class="agora-header">
+        <div class="logo-wrap">
+            <div class="logo-icon"></div>
+            <span class="agora-logo">AGORA</span>
+            <span class="tagline">PREDICTION TERMINAL</span>
+        </div>
+    </div>
+
+    <div class="category-filter" id="filters">
+        <button class="cat-btn active" onclick="filterCards('ALL')">ALL DECKS</button>
+        <button class="cat-btn" onclick="filterCards('WHALE MOVE')">INSIDER WHALES</button>
+        <button class="cat-btn" onclick="filterCards('ARBITRAGE')">GUARANTEED ARB</button>
+        <button class="cat-btn" onclick="filterCards('MACRO')">MACRO STRATEGY</button>
+        <button class="cat-btn" onclick="filterCards('TECH')">TECH INTEL</button>
+    </div>
+
+    <div class="deck-container" id="card-list"></div>
+
+    <script>
+        let allSignals = [];
+        const portImg = "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=400"; // Default abstract pattern
+
+        function handleMouseMove(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // NEW 3D TILT LOGIC: Perfectly follows cursor intensity
+            const rotateX = (y - centerY) / 12; 
+            const rotateY = (x - centerX) / 12;
+
+            card.style.transform = `perspective(2000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04, 1.04, 1.04)`;
+        }
+
+        function handleMouseLeave(e) {
+            e.currentTarget.style.transform = `perspective(2000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        }
+
+        async function update() {
+            const r = await fetch('/api/signals');
+            allSignals = await r.json();
+            renderCards(allSignals);
+        }
+
+        function filterCards(cat) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = cat === 'ALL' ? allSignals : allSignals.filter(s => s.category === cat);
+            renderCards(filtered);
+        }
+
+        function renderCards(data) {
+            document.getElementById('card-list').innerHTML = data.map(s => `
+                <div class="card-wrapper">
+                    <a href="/signal/${s.id}" class="card ${s.rarity}" onmousemove="handleMouseMove(event)" onmouseleave="handleMouseLeave(event)">
+                        <div class="card-inner">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                                <span style="font-size:10px; font-weight:bold; color:#666;">LVL ${s.confidence/10}</span>
+                                <span style="font-size:10px; font-weight:bold; color:var(--accent);">${s.rarity}</span>
+                            </div>
+                            <div class="portrait">
+                                <div class="portrait-img" style="background-image: url('${portImg}')"></div>
+                            </div>
+                            <div class="char-name">${s.char_name}</div>
+                            <div class="char-class">${s.char_class}</div>
+                            <div class="game-stats">
+                                <div class="stat-box">
+                                    <div class="label">POWER COST</div>
+                                    <div class="val">$${s.bet_amount}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="label">YIELD</div>
+                                    <div class="val">+$${s.est_profit}</div>
+                                </div>
+                            </div>
+                            <div class="unlock-btn">VIEW INTEL</div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+        }
+        
+        update();
+        setInterval(update, 20000);
+    </script>
+</body>
+</html>

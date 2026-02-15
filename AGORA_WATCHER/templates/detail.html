@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGNAL ANALYSIS // AGORA</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #CCFF00;
+            --text: #FFFFFF;
+            --card: #111111;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .back-link { color: var(--accent); text-decoration: none; font-size: 14px; margin-bottom: 20px; display: block; }
+        .title { font-size: 32px; font-weight: 900; margin: 20px 0; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        .box { background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid #222; margin-bottom: 25px; }
+        .label { color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .value { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
+        .highlight { color: var(--accent); }
+        .btn { 
+            display: inline-block; 
+            background: var(--accent); 
+            color: #000; 
+            padding: 15px 30px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: 900; 
+            margin-top: 20px; 
+            text-transform: uppercase;
+        }
+        .analysis-text { color: #ccc; white-space: pre-line; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← BACK TO ALL SIGNALS</a>
+        <div class="label">Market Intel Report</div>
+        <div class="title">{{ s.market }}</div>
+        
+        <div class="box">
+            <div class="label">Ravi's Recommendation</div>
+            <div class="value highlight">{{ s.recommendation }}</div>
+            
+            <div class="label">The "Why" (Analysis)</div>
+            <div class="analysis-text">{{ s.analysis }}</div>
+        </div>
+
+        <div class="box">
+            <div class="label">Risk Management</div>
+            <div class="meta-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <div class="label">Recommended Bet</div>
+                    <div class="value">$Unit {{ s.bet_amount }}</div>
+                </div>
+                <div>
+                    <div class="label">Est. Profit Potential</div>
+                    <div class="value">$Unit {{ s.est_profit }}</div>
+                </div>
+            </div>
+            <div class="label">Confidence Score</div>
+            <div class="value">{{ s.confidence }}%</div>
+        </div>
+
+        <a href="{{ s.url }}" target="_blank" class="btn">Execute on Polymarket →</a>
+    </div>
+</body>
+</html>

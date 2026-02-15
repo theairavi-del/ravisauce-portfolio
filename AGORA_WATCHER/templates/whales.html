@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WHALE WATCHER // AGORA</title>
+    <style>
+        :root { --bg: #050505; --accent: #CCFF00; --text: #FFFFFF; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding: 40px; }
+        .header { border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .logo { font-size: 32px; font-weight: 900; color: var(--accent); }
+        .whale-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .whale-row { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; align-items: center; }
+        .alias { font-weight: 900; color: var(--accent); }
+        .profit { font-family: monospace; color: #fff; }
+        .status-active { color: var(--accent); font-size: 10px; font-weight: 900; }
+        .back-link { color: #666; text-decoration: none; font-size: 12px; margin-bottom: 20px; display: block; }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← BACK TO TERMINAL</a>
+    <div class="header">
+        <div class="logo">WHALE WATCHER</div>
+        <div style="font-size: 12px; color: #666;">FOLLOW THE INSIDE MONEY</div>
+    </div>
+    <div class="whale-grid">
+        {% for w in whales %}
+        <div class="whale-row">
+            <div class="alias">{{ w.alias }}</div>
+            <div class="profit">PROFIT: ${{ "{:,.2f}".format(w.total_profit) }}</div>
+            <div class="last-trade">LAST: {{ w.last_trade }}</div>
+            <div class="status-active">● {{ w.status }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
