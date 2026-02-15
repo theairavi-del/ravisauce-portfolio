@@ -3406,7 +3406,10 @@
                     e.stopPropagation();
                     
                     const page = this.getAttribute('data-page');
+                    console.log('Mobile menu clicked:', page);
+                    
                     if (page) {
+                        console.log('Closing menu and showing page:', page);
                         closeMenu();
                         showPage(page);
                     }
@@ -3415,6 +3418,8 @@
         })();
 
         function showPage(page) {
+            console.log('showPage called:', page);
+            
             // Update tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.page === page);
@@ -3424,7 +3429,16 @@
             document.querySelectorAll('.page').forEach(p => {
                 p.classList.remove('active');
             });
-            document.getElementById(page + '-page').classList.add('active');
+            
+            const targetPage = document.getElementById(page + '-page');
+            console.log('Target page element:', targetPage);
+            
+            if (targetPage) {
+                targetPage.classList.add('active');
+                console.log('Added active class to:', page + '-page');
+            } else {
+                console.error('Could not find page:', page + '-page');
+            }
 
             // Update mobile items
             document.querySelectorAll('.mobile-item').forEach(item => {
