@@ -3397,8 +3397,6 @@
         }
 
         function showPage(page) {
-            console.log('Showing page:', page);
-            
             // Update tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.page === page);
@@ -3408,14 +3406,42 @@
             document.querySelectorAll('.page').forEach(p => {
                 p.classList.remove('active');
             });
-            
-            const pageElement = document.getElementById(page + '-page');
-            console.log('Page element found:', pageElement);
-            if (pageElement) {
-                pageElement.classList.add('active');
-            } else {
-                console.error('Page not found:', page + '-page');
+            document.getElementById(page + '-page').classList.add('active');
+
+            // Update mobile items
+            document.querySelectorAll('.mobile-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.page === page);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update modal navigation source
+            if (page === 'saved') {
+                renderSaved();
             }
+
+            // Update URL hash for direct linking
+            window.location.hash = page;
+        }
+
+        // Handle direct links on page load
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
+                showPage(hash);
+            }
+        });
+
+        // MOBILE DEBUG - Test if shop and contact elements exist
+        window.addEventListener('load', () => {
+            console.log('Shop page exists:', !!document.getElementById('shop-page'));
+            console.log('Contact page exists:', !!document.getElementById('contact-page'));
+            console.log('Home page exists:', !!document.getElementById('home-page'));
+            console.log('Saved page exists:', !!document.getElementById('saved-page'));
+        });
+
+        // FOOTER LIVE DATA
 
             // Update mobile items
             document.querySelectorAll('.mobile-item').forEach(item => {
