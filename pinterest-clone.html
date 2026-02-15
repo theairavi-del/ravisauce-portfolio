@@ -3428,6 +3428,16 @@
             if (hash && ['home', 'shop', 'contact', 'saved'].includes(hash)) {
                 showPage(hash);
             }
+            
+            // Bind mobile menu items
+            document.querySelectorAll('.mobile-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const page = this.getAttribute('data-page');
+                    goToPage(page);
+                });
+            });
         });
 
         // FOOTER LIVE DATA
