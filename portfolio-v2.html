@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAVISAUCE PORTFOLIO V2</title>
+    <link rel="icon" type="image/png" href="favicon.png?v=3">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background: rgba(45, 213, 18, 0.3);
+            color: #111;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .logo {
+            position: absolute;
+            left: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #888;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-tab:hover {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .nav-tab.active {
+            background: #2DD512;
+            color: #000;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding-top: 90px;
+            min-height: 100vh;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            padding: 40px 24px;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: pageEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes pageEnter {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HOME PAGE - MASONRY */
+        .masonry-grid {
+            column-count: 5;
+            column-gap: 16px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1200px) {
+            .masonry-grid { column-count: 4; }
+        }
+
+        @media (max-width: 900px) {
+            .masonry-grid { column-count: 3; }
+        }
+
+        @media (max-width: 600px) {
+            .masonry-grid { column-count: 2; column-gap: 12px; }
+        }
+
+        .pin {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #111;
+            transform-style: preserve-3d;
+        }
+
+        .pin img {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+            opacity: 0;
+            animation: pinLoad 0.5s ease forwards;
+        }
+
+        @keyframes pinLoad {
+            to { opacity: 1; }
+        }
+
+        .pin-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 16px;
+        }
+
+        .pin:hover .pin-overlay {
+            opacity: 1;
+        }
+
+        .save-btn {
+            align-self: flex-end;
+            background: #2DD512;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .save-btn:hover {
+            background: #25B50F;
+            transform: scale(1.05);
+        }
+
+        /* PROJECTS PAGE */
+        .projects-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .projects-header h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+
+        .projects-header p {
+            font-size: 18px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .accent {
+            color: #2DD512;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: #2DD512;
+            box-shadow: 0 20px 40px rgba(45, 213, 18, 0.1);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            padding: 24px;
+        }
+
+        .project-category {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #2DD512;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .project-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .project-arrow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #888;
+            transition: color 0.2s;
+        }
+
+        .project-card:hover .project-arrow {
+            color: #2DD512;
+        }
+
+        /* ABOUT PAGE */
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-hero {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 80px;
+            padding: 60px;
+            background: linear-gradient(135deg, #111 0%, #0a0a0a 100%);
+            border-radius: 30px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .about-photo {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(45, 213, 18, 0.2);
+        }
+
+        .about-text h1 {
+            font-size: 56px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .about-text .role {
+            font-size: 24px;
+            color: #2DD512;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .about-text .tagline {
+            font-size: 18px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .about-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .about-section {
+            padding: 40px;
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .about-section:hover {
+            border-color: #2DD512;
+        }
+
+        .about-section h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .about-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #888;
+        }
+
+        /* CONTACT PAGE */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-container h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .contact-container p {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .contact-form {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2DD512;
+            box-shadow: 0 0 0 3px rgba(45, 213, 18, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: #2DD512;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #25B50F;
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            padding: 40px 24px;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #2DD512;
+        }
+
+        .footer-copy {
+            color: #444;
+            font-size: 12px;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 16px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: #2DD512;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .nav-tabs {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.98);
+                border-top: 1px solid #1a1a1a;
+                padding: 12px 16px;
+                justify-content: space-around;
+                gap: 0;
+            }
+
+            .nav-tab {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .main {
+                padding-bottom: 80px;
+            }
+
+            .about-hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 24px;
+            }
+
+            .about-photo {
+                width: 180px;
+                height: 180px;
+            }
+
+            .about-text h1 {
+                font-size: 36px;
+            }
+
+            .projects-header h1,
+            .contact-container h1 {
+                font-size: 36px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo" onclick="showPage('home')">
+            <img src="ravisauce-logo-transparent.png" alt="Ravi Sauce">
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('home')" data-page="home">Work</button>
+            <button class="nav-tab" onclick="showPage('projects')" data-page="projects">Projects</button>
+            <button class="nav-tab" onclick="showPage('about')" data-page="about">About</button>
+            <button class="nav-tab" onclick="showPage('contact')" data-page="contact">Contact</button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <!-- HOME PAGE -->
+        <div id="home-page" class="page active">
+            <div class="masonry-grid" id="home-grid"></div>
+        </div>
+
+        <!-- PROJECTS PAGE -->
+        <div id="projects-page" class="page">
+            <div class="projects-header">
+                <h1>Selected <span class="accent">Projects</span></h1>
+                <p>A curated collection of work spanning product design, branding, packaging, and digital experiences. Each project represents a unique challenge and creative solution.</p>
+            </div>
+            
+            <div class="projects-grid">
+                <a href="projects/boreal.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/et1trJo0VjOaRTVBUnL3rU9nnQ.png?scale-down-to=1024" alt="Boreal">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Product Design</div>
+                        <h2 class="project-title">Boreal</h2>
+                        <p class="project-desc">A refined product design exploration focusing on minimal aesthetics and functional beauty.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/nestquest.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/i6VG3Eb6qmZPtQHNLXswh8h8i6c.png" alt="Nestquest">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Branding</div>
+                        <h2 class="project-title">Nestquest</h2>
+                        <p class="project-desc">Complete brand identity design capturing the essence of modern living and exploration.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/peak.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/DrU28gWRIzTFGKwxOafPNh5a6CI.png?scale-down-to=1024" alt="Peak">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Packaging</div>
+                        <h2 class="project-title">Peak</h2>
+                        <p class="project-desc">Premium packaging design that elevates the unboxing experience to an art form.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/cognis.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/arhrHDdgYmhvfQyxt8KHfwe1I.png" alt="Cognis">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Comic Book</div>
+                        <h2 class="project-title">Cognis</h2>
+                        <p class="project-desc">An AI-generated comic book pushing the boundaries of storytelling and visual art.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/pawlish.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/Jgleo6Uno5VOLFoxNyaMxzLrsnQ.png" alt="Pawlish">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Packaging & Ads</div>
+                        <h2 class="project-title">Pawlish</h2>
+                        <p class="project-desc">Playful packaging and advertising campaign for a pet care brand with personality.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/voiage.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/6JfpiwW6PAISuDTJsqdFvEFYTMM.png" alt="Voiage">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Website</div>
+                        <h2 class="project-title">Voiage</h2>
+                        <p class="project-desc">Immersive web experience design that transports users through digital landscapes.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+
+                <a href="projects/mirage.html" class="project-card">
+                    <div class="project-image">
+                        <img src="https://framerusercontent.com/images/KCR2dTSM6QntwwAWqPlXZ75pfGQ.png" alt="Mirage">
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">Branding</div>
+                        <h2 class="project-title">Mirage</h2>
+                        <p class="project-desc">Ethereal brand identity that plays with perception and creates lasting impressions.</p>
+                        <div class="project-arrow">View Project →</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div id="about-page" class="page">
+            <div class="about-container">
+                <div class="about-hero">
+                    <img src="https://framerusercontent.com/images/xuKXhh0mwkM7ODZMFl7EJ0NASVo.png" alt="Ravi" class="about-photo">
+                    <div class="about-text">
+                        <h1>Ravi Sauce</h1>
+                        <div class="role">Designer & Creative Director</div>
+                        <p class="tagline">Blending organic forms with brutalist precision to create designs that challenge conventions and spark curiosity. Every project is an experiment in visual storytelling.</p>
+                    </div>
+                </div>
+
+                <div class="about-sections">
+                    <div class="about-section">
+                        <h2><span>🎨</span> Design Philosophy</h2>
+                        <p>I believe in the power of contrast—where organic meets geometric, where chaos meets order. My work explores the tension between natural forms and digital precision, creating visual experiences that feel both familiar and otherworldly.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h2><span>🧪</span> The Lab Approach</h2>
+                        <p>Every project starts as an experiment. I test boundaries, combine unexpected elements, and refine until the solution emerges. This iterative process ensures each piece is both innovative and purposeful.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h2><span>⚡</span> Capabilities</h2>
+                        <p>Brand Identity, Visual Design, Packaging, Web Design, Art Direction, 3D Visualization, and AI-Assisted Creative. I bring a multidisciplinary approach to every challenge.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="contact-page" class="page">
+            <div class="contact-container">
+                <h1>Let's <span class="accent">Connect</span></h1>
+                <p>Have a project in mind? I'd love to hear about it. Let's create something extraordinary together.</p>
+                
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent! I\'ll get back to you soon.'); this.reset();">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea placeholder="Tell me about your project..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- IMAGE MODAL -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <img id="modal-img" src="" alt="">
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">RAVI<span class="accent">SAUCE</span></div>
+            <div class="footer-links">
+                <a href="#" onclick="showPage('home')">Work</a>
+                <a href="#" onclick="showPage('projects')">Projects</a>
+                <a href="#" onclick="showPage('about')">About</a>
+                <a href="#" onclick="showPage('contact')">Contact</a>
+            </div>
+            <div class="footer-copy">© 2025 Ravi Sauce. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Portfolio images
+        const images = [
+            '1.png', '2.png', 'img-1.jpeg', 'img-2.jpeg', 'img-3.jpeg',
+            'img-4.jpeg', 'img-5.jpeg', 'img-6.jpeg', 'front.jpeg', 'open.jpeg', 'otherside.jpeg'
+        ];
+
+        // Shuffle images
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        let shuffledImages = shuffle([...images]);
+        let savedImages = JSON.parse(localStorage.getItem('savedPins') || '[]');
+
+        // Render home grid
+        const homeGrid = document.getElementById('home-grid');
+        shuffledImages.forEach((filename, i) => {
+            const pin = createPin(filename, i);
+            homeGrid.appendChild(pin);
+        });
+
+        function createPin(filename, i) {
+            const pin = document.createElement('div');
+            pin.className = 'pin';
+            const isSaved = savedImages.includes(filename);
+
+            pin.innerHTML = `
+                <img src="${filename}" alt="" loading="lazy" style="animation-delay: ${i * 0.05}s">
+                <div class="pin-overlay">
+                    <button class="save-btn ${isSaved ? 'saved' : ''}" onclick="toggleSave('${filename}', this)">
+                        ${isSaved ? 'Saved' : 'Save'}
+                    </button>
+                </div>
+            `;
+
+            pin.onclick = (e) => {
+                if (e.target.tagName !== 'BUTTON') {
+                    openModal(filename);
+                }
+            };
+
+            return pin;
+        }
+
+        function toggleSave(filename, btn) {
+            const index = savedImages.indexOf(filename);
+            if (index > -1) {
+                savedImages.splice(index, 1);
+                btn.textContent = 'Save';
+                btn.classList.remove('saved');
+            } else {
+                savedImages.push(filename);
+                btn.textContent = 'Saved';
+                btn.classList.add('saved');
+            }
+            localStorage.setItem('savedPins', JSON.stringify(savedImages));
+            event.stopPropagation();
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.page === page);
+            });
+
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+
+            const targetPage = document.getElementById(page + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.location.hash = page;
+        }
+
+        // Handle hash on load
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && ['home', 'projects', 'about', 'contact'].includes(hash)) {
+                showPage(hash);
+            }
+        });
+
+        // Modal functions
+        function openModal(filename) {
+            const modal = document.getElementById('modal');
+            const img = document.getElementById('modal-img');
+            img.src = filename;
+            modal.classList.add('active');
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'modal' || event.target.className === 'modal-close') {
+                document.getElementById('modal').classList.remove('active');
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if (e.key === 'Escape') closeModal();
+        };
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(10, 10, 10, 0.98)';
+            } else {
+                header.style.background = 'rgba(10, 10, 10, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
