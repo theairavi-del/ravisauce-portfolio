@@ -1308,6 +1308,39 @@
         }
 
         @media (max-width: 768px) {
+            .modal-overlay {
+                padding: 0;
+                background: #000;
+            }
+            .modal-content {
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal-content img {
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+                object-fit: contain;
+            }
+            .modal-close {
+                top: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.5);
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                background: rgba(0,0,0,0.5);
+                color: white;
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            .nav-arrow.prev { left: 10px; }
+            .nav-arrow.next { right: 10px; }
+            
             .main {
                 padding-left: 0;
                 padding-right: 0;
